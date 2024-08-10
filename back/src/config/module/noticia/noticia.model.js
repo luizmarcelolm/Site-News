@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const noticiaSchema = new Schema({
   titulo: String, 
   img: String,
-  texto: String, 
+  texto: String
 },
 {
     timestamps: true,
