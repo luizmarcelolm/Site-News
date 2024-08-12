@@ -2,10 +2,13 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const usuarioModel = require('./src/config/module/usuario/usuario.model');
+const noticiaModel = require('./src/config/module/noticia/noticia.model');
 
 const app = express();
 app.use(express.json());
 
+
+// post login
 app.post('/login', async (req,res) => {
     if(!req.body.email) {
         return res.status(400).json({message: "O campo email é obrigatório"});
@@ -34,11 +37,13 @@ app.post('/login', async (req,res) => {
     return res.status(200).json({message: "Login realizado com sucesso", token});
 });
 
+//get usuarios
 app.get('/usuarios', async (req, res) => {
     const usuarios = await usuarioModel.find({});
     return res.status(200).json(usuarios);
 });
 
+//post usuarios
 app.post('/usuarios',async (req, res) =>{
     if(!req.body.email){
         return res.status(400).json ({message: "O campo email é obrigatório"});
@@ -63,12 +68,37 @@ app.post('/usuarios',async (req, res) =>{
     return res.status(201).json(usuario);   
 });
 
-app.get('/noticias', (req, res) =>{
-    return res.status(200).json([]);
+// get noticias
+app.get('/noticias', async (req, res) =>{
+    let filtroCategoria = {};
+    if(req.query.categoria){
+        filtroCategoria = {categoria: req.query.categoria};
+    }
+    const noticias = await noticiaModel.find(filtroCategoria);
+    return res.status(200).json(noticias);
 });
 
-app.post('/noticias', (req, res) =>{
-    return res.status(201).json([]);
+// post noticias
+app.post('/noticias', async  (req, res) =>{
+    if(!req.body.titulo){
+        return res.status(400).json ({message: "O campo titulo é obrigatório"});
+    }
+    if(!req.body.img){
+        return res.status(400).json ({message: "O campo img é obrigatório"});
+    }
+    if(!req.body.texto){
+        return res.status(400).json ({message: "O campo texto é obrigatório"});
+    }
+    if(!req.body.categoria){
+        return res.status(400).json ({message: "O campo categoria é obrigatório"});
+    }
+    const noticia = await noticiaModel.create({
+        titulo: req.body.titulo,
+        img: req.body.img,
+        texto: req.body.texto,
+        categoria: req.body.categoria,
+    });
+    return res.status(201).json(noticia);
 });
 
 app.listen(8080, () => {
