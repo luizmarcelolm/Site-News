@@ -20,9 +20,11 @@ const Menu = () => {
            <div className='menu_lateral'>
             <div className='fechar' onClick={() => setMenuLateral(!menulateral)}>X</div>
                 <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/noticias/produto">Produto</a></li>
+                    <li><a href="/noticias/tecnologia">Tecnologia</a></li>
+                    <li><a href="/noticias/rh">RH</a></li>
+                    <li><a href="/noticias/vendas">Vendas</a></li>
                 </ul>
           </div>}
        </>
